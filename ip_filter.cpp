@@ -60,7 +60,7 @@ void Ip_sort(std::vector<std::vector<std::string>>& line)
         }
     }
     std::vector<std::vector<std::string>> a;
-    for (size_t i = line.size() - 1; i != -1; i--)
+    for (size_t i = line.size() - 1; i != size_t(-1); i--)
     {
         a.push_back(line[i]);
     }
