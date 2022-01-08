@@ -1,0 +1,3 @@
+﻿  ip_filter.cpp
+D:\OtusHW\ip_filter.cpp(63,5): warning C4267: инициализация: преобразование из "size_t" в "int"; возможна потеря данных
+  IPFilter.vcxproj -> D:\OtusHW\build\Debug\IPFilter.exe
