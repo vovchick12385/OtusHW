@@ -34,7 +34,7 @@ std::vector<std::string> split(const std::string &str, char d)
 what isMore(const std::vector<std::string>& a, const std::vector < std::string>& b)
 {
 
-    for (int i=0;i<a.size()-1;++i)
+    for (size_t i=0;i<a.size()-1;++i)
     {
         if (std::stoi(a[i]) > std::stoi(b[i]))
             return More;
@@ -48,8 +48,8 @@ void Ip_sort(std::vector<std::vector<std::string>>& line)
 {
     std::vector<std::string> str;
 
-    for (int i = 0; i < line.size() - 1; i++) {
-        for (int j = 0; j < line.size() - i-1; j++) {
+    for (size_t i = 0; i < line.size() - 1; i++) {
+        for (size_t j = 0; j < line.size() - i-1; j++) {
             what m = isMore(line[j + 1], line[j]);
             if (m == Less)
             {
@@ -60,7 +60,7 @@ void Ip_sort(std::vector<std::vector<std::string>>& line)
         }
     }
     std::vector<std::vector<std::string>> a;
-    for (int i = line.size() - 1; i != -1; i--)
+    for (size_t i = line.size() - 1; i != -1; i--)
     {
         a.push_back(line[i]);
     }
@@ -128,7 +128,7 @@ void COut(const std::vector<std::vector<std::string>>& ip_pool)
     }
 }
 
-int main(int argc, char const *argv[])
+int main(int, char const **)
 {
     try
     {
