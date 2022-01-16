@@ -1,6 +1,6 @@
 ﻿cmake_minimum_required (VERSION 3.8)
 
-project ("IPFilter")
+project ("IPFilter" VERSION 1.2.3)
 
 
 add_executable (IPFilter "ip_filter.cpp")

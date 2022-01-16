@@ -3,6 +3,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <algorithm>
 
 // ("",  '.') -> [""]
 // ("11", '.') -> ["11"]
@@ -10,8 +11,8 @@
 // ("11.", '.') -> ["11", ""]
 // (".11", '.') -> ["", "11"]
 // ("11.22", '.') -> ["11", "22"]
-enum what { Less, Equal, More };
-void COut(const std::vector<std::vector<std::string>>& line);
+
+void COut(const std::vector<std::vector<uint8_t>>& ip_pool);
 std::vector<std::string> split(const std::string &str, char d)
 {
     std::vector<std::string> r;
@@ -31,49 +32,31 @@ std::vector<std::string> split(const std::string &str, char d)
     return r;
 }
 
-what isMore(const std::vector<std::string>& a, const std::vector < std::string>& b)
+
+
+void Ip_sort(std::vector<std::vector<uint8_t>>& line)
 {
-
-    for (size_t i=0;i<a.size()-1;++i)
-    {
-        if (std::stoi(a[i]) > std::stoi(b[i]))
-            return More;
-        else if (std::stoi(a[i]) < std::stoi(b[i]))
-            return Less;
-    }
-    return Equal;
-}
-
-void Ip_sort(std::vector<std::vector<std::string>>& line)
-{
-    std::vector<std::string> str;
-
-    for (size_t i = 0; i < line.size() - 1; i++) {
-        for (size_t j = 0; j < line.size() - i-1; j++) {
-            what m = isMore(line[j + 1], line[j]);
-            if (m == Less)
-            {
-                str = line[j];
-                line[j] = line[j+1];
-                line[j+1] = str;
-            }
+    std::sort(line.begin(), line.end(), [](std::vector<uint8_t>& a, std::vector<uint8_t>& b) {
+        for (int i = 0; i < 4; ++i) {
+            if (a[i] < b[i])
+                return false;
+            else if (a[i] > b[i])
+                return true;
+            else
+                continue;
         }
-    }
-    std::vector<std::vector<std::string>> a;
-    for (size_t i = line.size() - 1; i != size_t(-1); i--)
-    {
-        a.push_back(line[i]);
-    }
-    line.clear();
-    line = a;
+        return false;
+        });
+    
+    
 }
 
-void filter(std::vector<std::vector<std::string>> line,int i)
+void filter(const std::vector<std::vector<uint8_t>>& line,int i)
 {
-    std::vector<std::vector<std::string>> a;
+    std::vector<std::vector<uint8_t>> a;
     for (const auto& c : line)
     {
-       if (std::stoi(c[0]) == i)
+       if (c[0]== i)
        {
            a.push_back(c);
        }
@@ -81,29 +64,29 @@ void filter(std::vector<std::vector<std::string>> line,int i)
     COut(a);
 
 }
-void filter(std::vector<std::vector<std::string>> line, int first, int second)
+void filter(const std::vector<std::vector<uint8_t>>& line, int first, int second)
 {
-    std::vector<std::vector<std::string>> a;
+    std::vector<std::vector<uint8_t>> a;
     for (const auto& c : line)
     {
-        if ((std::stoi(c[0]) == first)&&(std::stoi(c[1])==second))
+        if ((c[0] == first)&&(c[1]==second))
         {
             a.push_back(c);
         }
     }
     COut(a);
 }
-void filter_any(std::vector<std::vector<std::string>> line, int i)
+void filter_any(const std::vector<std::vector<uint8_t>>& line, int i)
 {
-    std::vector<std::vector<std::string>> a;
+    std::vector<std::vector<uint8_t>> a;
     for (const auto& c : line)
     {
         for (const auto& m : c)
         {
-            if (std::stoi(m) == i)
+            if (m == i)
             {
                 a.push_back(c);
-                continue;
+                break;
             }
         }
        
@@ -111,21 +94,33 @@ void filter_any(std::vector<std::vector<std::string>> line, int i)
     COut(a);
 }
 
-void COut(const std::vector<std::vector<std::string>>& ip_pool)
+void COut(const std::vector<std::vector<uint8_t>>& ip_pool)
 {
-    for (std::vector<std::vector<std::string>>::const_iterator ip = ip_pool.cbegin(); ip != ip_pool.cend(); ++ip)
-    {
-        for (std::vector<std::string>::const_iterator ip_part = ip->cbegin(); ip_part != ip->cend(); ++ip_part)
-        {
-            if (ip_part != ip->cbegin())
-            {
-                std::cout << ".";
-
-            }
-            std::cout << *ip_part;
+    for (const auto& c : ip_pool) {
+        for (int i = 0; i < 3; ++i) {
+            std::cout << unsigned(c[i]) << ".";
         }
-        std::cout << std::endl;
+        std::cout << unsigned(c[3]) << std::endl;
     }
+}
+std::vector<std::vector<uint8_t>> IPToint(const std::vector<std::vector<std::string>>&  ip) {
+    std::vector<uint8_t> num;
+    std::vector<std::vector<uint8_t>> ippool;
+    for (const auto& c : ip) {
+        for (const auto& p : c) {
+            for (const auto& m : p) {
+                if (m < '0' || m>'9') {
+                    std::cout << "Bad Ip: " << p << std::endl;
+                    std::exception("Bad Ip");
+                }
+                    
+            }
+            num.push_back(std::stoi(p));
+        }
+        ippool.push_back(num);
+        num.clear();
+    }
+    return ippool;
 }
 
 int main(int, char const **)
@@ -139,15 +134,15 @@ int main(int, char const **)
             std::vector<std::string> v = split(line, '\t');
             ip_pool.push_back(split(v.at(0), '.'));
         }
-
-        Ip_sort(ip_pool);
+        auto ip = IPToint(ip_pool);
+        Ip_sort(ip);
         // TODO reverse lexicographically sort
 
-        COut(ip_pool);
+        COut(ip);
 
-        filter(ip_pool, 46);
-        filter(ip_pool, 46, 70);
-        filter_any(ip_pool, 46);
+        filter(ip, 46);
+        filter(ip, 46, 70);
+        filter_any(ip, 46);
         
         // 222.173.235.246
         // 222.130.177.64
