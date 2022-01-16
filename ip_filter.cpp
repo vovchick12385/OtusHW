@@ -4,6 +4,7 @@
 #include <string>
 #include <vector>
 #include <algorithm>
+#include <exception>
 
 // ("",  '.') -> [""]
 // ("11", '.') -> ["11"]
