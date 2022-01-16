@@ -108,15 +108,28 @@ std::vector<std::vector<uint8_t>> IPToint(const std::vector<std::vector<std::str
     std::vector<uint8_t> num;
     std::vector<std::vector<uint8_t>> ippool;
     for (const auto& c : ip) {
+        bool bad = false;
         for (const auto& p : c) {
+            
             for (const auto& m : p) {
                 if (m < '0' || m>'9') {
-                    std::cout << "Bad Ip: " << p << std::endl;
-                    std::exception("Bad Ip");
+                    bad = true;
+                    break;
                 }
                     
             }
+            if (bad)
+                break;
+            
             num.push_back(std::stoi(p));
+        }
+        if (bad) {
+            std::string str = "Bad ip: ";
+            for (int i = 0; i < 3; ++i) {
+                str += (c[i] + ".");
+            }
+            str += c[3];
+            throw std::exception(str.c_str());
         }
         ippool.push_back(num);
         num.clear();
