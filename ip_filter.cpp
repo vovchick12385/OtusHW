@@ -110,7 +110,10 @@ std::vector<std::vector<uint8_t>> IPToint(const std::vector<std::vector<std::str
     for (const auto& c : ip) {
         bool bad = false;
         for (const auto& p : c) {
-            
+            if (p == "") {
+                bad = true;
+                break;
+            }
             for (const auto& m : p) {
                 if (m < '0' || m>'9') {
                     bad = true;
