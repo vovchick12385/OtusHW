@@ -27,8 +27,8 @@ std::vector<std::string> split(const std::string &str, char d)
         start = stop + 1;
         stop = str.find_first_of(d, start);
     }
-    stop = str.find(" ");
-    r.push_back(str.substr(start,stop));
+    //stop = str.find(" ");
+    r.push_back(str.substr(start));
 
     return r;
 }
@@ -157,7 +157,7 @@ int main(int, char const **)
 
         COut(ip);
 
-        filter(ip, 46);
+        filter(ip, 1);
         filter(ip, 46, 70);
         filter_any(ip, 46);
         
