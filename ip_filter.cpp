@@ -27,8 +27,8 @@ std::vector<std::string> split(const std::string &str, char d)
         start = stop + 1;
         stop = str.find_first_of(d, start);
     }
-
-    r.push_back(str.substr(start));
+    stop = str.find(" ");
+    r.push_back(str.substr(start,stop));
 
     return r;
 }
@@ -132,7 +132,7 @@ std::vector<std::vector<uint8_t>> IPToint(const std::vector<std::vector<std::str
                 str += (c[i] + ".");
             }
             str += c[3];
-            throw std::exception(str.c_str());
+            throw std::invalid_argument(str.c_str());
         }
         ippool.push_back(num);
         num.clear();
